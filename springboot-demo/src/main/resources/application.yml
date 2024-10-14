@@ -1,0 +1,24 @@
+spring:
+  datasource:
+    password: "mari33#06adb"
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    url: jdbc:mariadb://arch.wsl:13306/demo?useSsl=false
+  redis:
+    host: arch.wsl
+    port: 16379
+    password: "re63#79dis"
+  cache:
+    type: redis
+  # redis 配置
+#  redis:
+#    host: 10.130.1.11
+#    port: 3379
+#    password: "WAsd123~2321"
+#    database: 1
+#    pool:
+#      max-active: 1000
+#      max-wait: 60000
+#      min-idle: 20
+#      max-idle: 20
+#    timeout: 2000
