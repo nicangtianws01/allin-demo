@@ -13,7 +13,7 @@
         <module>algorithm</module>
         <module>springboot-demo</module>
         <module>bacnet-demo</module>
-        <module>server-demo</module>
+<!--        <module>server-demo</module>-->
         <module>reactor-demo</module>
         <module>jvm</module>
     </modules>
