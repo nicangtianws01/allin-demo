@@ -1,0 +1,14 @@
+server:
+  port: 8090
+spring:
+  datasource:
+    password: "mari33#06adb"
+    driver-class-name: org.mariadb.jdbc.Driver
+    username: root
+    url: jdbc:mariadb://ubuntu2204.wsl:3306/demo?useSsl=false
+  redis:
+    host: ubuntu2204.wsl
+    port: 6379
+    password: "re63#79dis"
+  cache:
+    type: redis

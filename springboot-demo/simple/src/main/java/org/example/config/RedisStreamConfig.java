@@ -43,7 +43,7 @@ public class RedisStreamConfig {
      */
     @Bean
     public Subscription subscription(RedisConnectionFactory connectionFactory) throws UnknownHostException {
-
+        // 新建group
         createConsumerGroupIfNotExists(connectionFactory, streamKey, streamKey);
 
         StreamOffset<String> streamOffset = StreamOffset.create(streamKey, ReadOffset.lastConsumed());

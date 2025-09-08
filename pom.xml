@@ -16,6 +16,9 @@
 <!--        <module>server-demo</module>-->
         <module>reactor-demo</module>
         <module>jvm</module>
+        <module>framework</module>
+        <module>web-demo</module>
+        <module>web-demo/web-simple</module>
     </modules>
 
     <properties>
@@ -39,7 +42,7 @@
             <dependency>
                 <groupId>org.projectlombok</groupId>
                 <artifactId>lombok</artifactId>
-                <version>1.18.24</version>
+                <version>1.18.30</version>
             </dependency>
             <dependency>
                 <groupId>org.junit.jupiter</groupId>
@@ -66,11 +69,6 @@
                 <groupId>commons-codec</groupId>
                 <artifactId>commons-codec</artifactId>
                 <version>1.17.0</version>
-            </dependency>
-            <dependency>
-                <groupId>cn.hutool</groupId>
-                <artifactId>hutool-all</artifactId>
-                <version>5.8.25</version>
             </dependency>
             <dependency>
                 <groupId>org.bouncycastle</groupId>

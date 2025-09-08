@@ -1,16 +1,21 @@
+server:
+  port: 8080
 spring:
   datasource:
     password: "mari33#06adb"
     driver-class-name: org.mariadb.jdbc.Driver
     username: root
-    url: jdbc:mariadb://arch.wsl:13306/demo?useSsl=false
+    url: jdbc:mariadb://ubuntu2204.wsl:3306/demo?useSsl=false
   redis:
-    host: arch.wsl
-    port: 16379
+    host: ubuntu2204.wsl
+    port: 6379
     password: "re63#79dis"
   cache:
     type: redis
-  # redis 配置
+logging:
+  file:
+    path: ./logs
+# redis 配置
 #  redis:
 #    host: 10.130.1.11
 #    port: 3379

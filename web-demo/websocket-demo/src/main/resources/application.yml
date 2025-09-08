@@ -1,0 +1,6 @@
+server:
+  port: 8081
+token:
+  secretKey: test123
+  refreshTime: 60000
+  expiresTime: 120000

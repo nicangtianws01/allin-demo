@@ -5,12 +5,16 @@
     <option name="originalFiles">
       <list>
         <option value="$PROJECT_DIR$/pom.xml" />
+        <option value="$PROJECT_DIR$/springboot-demo/auth2-demo/pom.xml" />
       </list>
     </option>
     <option name="ignoredFiles">
       <set>
         <option value="$PROJECT_DIR$/bacnet-demo/pom.xml" />
         <option value="$PROJECT_DIR$/jimmer-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/springboot-demo/auth2-demo/pom.xml" />
+        <option value="$PROJECT_DIR$/springboot/pom.xml" />
+        <option value="$PROJECT_DIR$/websocket-demo/pom.xml" />
       </set>
     </option>
   </component>

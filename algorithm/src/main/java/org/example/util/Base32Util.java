@@ -1,7 +1,5 @@
 package org.example.util;
 
-import cn.hutool.core.text.StrBuilder;
-
 /**
  * 将整数转为base32字符的工具，因为是32进制，所以每5个bit位转一次
  */
@@ -10,7 +8,7 @@ public class Base32Util {
     private final static String baseChars = "CSB7H8DAKXZF3N95RTMV6UQG2YE4JWPL";
 
     public static String encode(long raw) {
-        StrBuilder sb = new StrBuilder();
+        StringBuilder sb = new StringBuilder();
         while (raw != 0) {
             int i = (int) (raw & 0b11111);
             sb.append(baseChars.charAt(i));
@@ -30,7 +28,7 @@ public class Base32Util {
     }
 
     public static String encode(byte[] raw) {
-        StrBuilder sb = new StrBuilder();
+        StringBuilder sb = new StringBuilder();
         int size = 0;
         int temp = 0;
         for (byte b : raw) {
