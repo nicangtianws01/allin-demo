@@ -1,7 +1,7 @@
 server:
-  port: 8090
+  port: 8091
 spring:
   application:
-    name: auth-server
+    name: auth-client
   thymeleaf:
     cache: false

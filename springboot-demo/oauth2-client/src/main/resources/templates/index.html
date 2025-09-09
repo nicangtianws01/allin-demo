@@ -1,0 +1,85 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+</head>
+<body>
+<button id="get-auth-btn">授权</button>
+<div id="authed-div" style="display: none">已授权</div>
+<script th:inline="javascript">
+
+
+    const params = new URLSearchParams(window.location.search)
+    const authCode = params.get("authCode")
+    if (authCode) {
+        ajax('GET', 'http://localhost:8091/auth/' + authCode)
+            .then((res) => {
+                console.log(res.response)
+                const response = JSON.parse(res.response)
+                if (response && response.code === 200) {
+                    const authBtn = document.querySelector("#get-auth-btn")
+                    authBtn.style = 'display: none'
+                    const text = document.querySelector('#authed-div')
+                    text.style = 'display: block'
+                }
+            })
+    }
+
+    function ajax(verb, url, data, fulfilled, rejected) {
+        return new Promise(function (fulfilled, rejected) {
+            // Create XMLHttpRequest object
+            let req = new XMLHttpRequest();
+
+            // When the entire request fails it is probably a network error
+            req.onerror = function () {
+                rejected(new Error('There was a network error.'));
+            };
+
+            // Setup state change event
+            req.onreadystatechange = function () {
+                if (this.readyState === XMLHttpRequest.DONE) {
+                    // Check status property to see what is going on
+                    if (this.status >= 200 && this.status < 400) {
+                        fulfilled(this);
+                    } else if (this.status >= 400) {
+                        rejected({
+                            "status": this.status,
+                            "statusText": this.statusText,
+                            "response": this.response,
+                            "responseText": this.responseText
+                        });
+                    }
+                }
+            };
+
+            // Open Request
+            req.open(verb, url);
+
+            // Set headers for JSON
+            req.setRequestHeader("Content-Type", "application/json");
+
+            // Check to see if we need to pass data
+            if (data) {
+                // Submit the request with data
+                req.send(JSON.stringify(data));
+            } else {
+                // Submit the request
+                req.send();
+            }
+        });
+    }
+
+    const authBtn = document.querySelector("#get-auth-btn")
+    authBtn.onclick = () => {
+        location.href = "http://localhost:8090/auth?clientId=123&redirectUri=http://localhost:8091"
+        // ajax('GET', 'http://localhost:8090/auth')
+        //     .then((res) => {
+        //         console.log('auth code response: ', res)
+        //     })
+    }
+
+</script>
+</body>
+</html>

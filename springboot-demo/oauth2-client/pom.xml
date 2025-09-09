@@ -6,11 +6,10 @@
         <artifactId>springboot-demo</artifactId>
         <version>1.0-SNAPSHOT</version>
     </parent>
-    <artifactId>auth2-auth</artifactId>
+    <artifactId>oauth2-client</artifactId>
     <packaging>jar</packaging>
-    <name>auth2-auth</name>
+    <name>oauth2-client</name>
     <dependencies>
-
         <dependency>
             <groupId>org.example</groupId>
             <artifactId>oauth2-common</artifactId>
@@ -25,22 +24,6 @@
             <groupId>org.springframework.boot</groupId>
             <artifactId>spring-boot-starter-thymeleaf</artifactId>
         </dependency>
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-jdbc</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-data-jpa</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.boot</groupId>-->
-<!--            <artifactId>spring-boot-starter-security</artifactId>-->
-<!--        </dependency>-->
-<!--        <dependency>-->
-<!--            <groupId>org.springframework.security</groupId>-->
-<!--            <artifactId>spring-security-oauth2-authorization-server</artifactId>-->
-<!--        </dependency>-->
 
         <dependency>
             <groupId>org.projectlombok</groupId>
@@ -52,6 +35,6 @@
         </dependency>
     </dependencies>
     <build>
-        <finalName>auth2-auth</finalName>
+        <finalName>oauth2-client</finalName>
     </build>
 </project>
