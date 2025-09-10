@@ -1,4 +1,4 @@
-package org.example.auth2;
+package org.example.oauth2;
 
 import lombok.extern.slf4j.Slf4j;
 import org.springframework.beans.factory.annotation.Value;

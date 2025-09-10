@@ -1,13 +1,14 @@
-package org.example.auth2.controller;
+package org.example.oauth2.controller;
 
 import org.example.oauth2.dto.Result;
 import org.springframework.stereotype.Controller;
 import org.springframework.ui.Model;
 import org.springframework.web.bind.annotation.*;
 
+import javax.servlet.http.HttpServletResponse;
 import java.util.Map;
 
-@CrossOrigin(origins = "http://localhost:3000", // 或 "*"（如无 credentials 需求）
+@CrossOrigin(origins = "http://localhost:8091", // 或 "*"（如无 credentials 需求）
         allowedHeaders = "*",
         methods = {RequestMethod.GET, RequestMethod.POST, RequestMethod.PUT, RequestMethod.DELETE},
         allowCredentials = "true",
@@ -32,7 +33,7 @@ public class AuthController {
 
     @ResponseBody
     @RequestMapping("/login")
-    public Result<String> login(@RequestBody Map<String, String> body) {
+    public Result<String> login(@RequestBody Map<String, String> body, HttpServletResponse response) {
         String username = body.get("username");
         String password = body.get("password");
         if (username == null || password == null) {
@@ -53,7 +54,7 @@ public class AuthController {
         if (clientId == null || clientSecret == null) {
             return new Result<String>().error("clientId and clientSecret are required");
         }
-        if (!clientId.equals("123") && !clientSecret.equals("test123")) {
+        if (!clientId.equals("123") || !clientSecret.equals("test123")) {
             return new Result<String>().error("invalid clientId or clientSecret");
         }
         if (code == null || !code.equals("123")) {

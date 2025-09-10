@@ -47,4 +47,9 @@ public class Result<T> {
         this.msg = msg;
         return this;
     }
+    public Result<T> error(int code, String msg) {
+        this.code = code;
+        this.msg = msg;
+        return this;
+    }
 }
