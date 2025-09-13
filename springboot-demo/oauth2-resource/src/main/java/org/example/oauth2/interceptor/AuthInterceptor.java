@@ -13,7 +13,7 @@ public class AuthInterceptor implements HandlerInterceptor {
     @Override
     public boolean preHandle(HttpServletRequest request, HttpServletResponse response, Object handler) throws Exception {
         String authorization = request.getHeader("Authorization");
-        if (authorization == null || !authorization.equals("abc")) {
+        if (authorization == null) {
             throw new NoPermissionException("invalid token");
         }
         return HandlerInterceptor.super.preHandle(request, response, handler);

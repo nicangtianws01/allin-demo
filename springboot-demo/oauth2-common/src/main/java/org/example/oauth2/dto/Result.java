@@ -2,54 +2,43 @@ package org.example.oauth2.dto;
 
 import lombok.Getter;
 import lombok.Setter;
-import lombok.experimental.Accessors;
 
-@Accessors(chain = true)
 @Getter
 @Setter
 public class Result<T> {
-    private Integer code = 200;
-    private String msg;
+    private Integer code;
+    private String message;
     private T data;
-    public Result(int code, String msg, T data) {
+    public Result(int code, String message, T data) {
         this.code = code;
-        this.msg = msg;
+        this.message = message;
         this.data = data;
     }
-    public Result(int code, String msg) {
+    public Result(int code, String message) {
         this.code = code;
-        this.msg = msg;
-    }
-    public Result(int code) {
-        this.code = code;
-    }
-    public Result() {
-
+        this.message = message;
     }
 
-    public Result<T> success() {
+    public Result() {}
+
+    public static Result<Object> success() {
         return success("success", null);
     }
-    public Result<T> success(String msg) {
-        return success(msg, null);
-    }
-    public Result<T> success(String msg, T data) {
-        this.msg = msg;
-        this.data = data;
-        return this;
+    public static <T> Result<T> success(T data) {
+        return success("success", data);
     }
 
-    public Result<T> error() {
+    public static <T> Result<T> success(String message, T data) {
+        return new Result<T>(200, message, data);
+    }
+
+    public static <T> Result<T> error() {
         return error("error");
     }
-    public Result<T> error(String msg) {
-        this.code = 500;
-        this.msg = msg;
-        return this;
+    public static <T> Result<T> error(String message) {
+        return error(500, message);
     }
-    public Result<T> error(int code, String msg) {
-        this.code = code;
-        this.msg = msg;
-        return this;
+    public static <T> Result<T> error(int code, String message) {
+        return new Result<>(code, message);
     }
 }

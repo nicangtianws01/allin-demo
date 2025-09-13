@@ -16,10 +16,14 @@
     <input id="password" name="password" type="password">
   </label><br>
   <button type="button" id="login-btn">登录并授权</button>
+  <div id="message-div">
+
+  </div>
 </div>
 <script th:inline="javascript">
 
     const redirectUri = /*[[${redirectUri}]]*/ '';
+    const clientId = /*[[${clientId}]]*/ '';
 
     function ajax(verb, url, data, fulfilled, rejected) {
         return new Promise(function (fulfilled, rejected) {
@@ -68,23 +72,26 @@
     const usernameInput = document.querySelector('#username')
     const passwordInput = document.querySelector('#password')
     const loginBtn = document.querySelector('#login-btn')
-    loginBtn.addEventListener("click", (event) => {
-        ajax('POST', 'http://localhost:8090/login', {username: usernameInput.value, password: passwordInput.value})
+    const messageDiv = document.querySelector('#message-div')
+    loginBtn.addEventListener("click", function () {
+        ajax('POST', 'http://localhost:8090/login', {
+            username: usernameInput.value,
+            password: passwordInput.value,
+            clientId: clientId
+        })
             .then((res) => {
                 const response = JSON.parse(res.response)
-                // console.log('auth login response:', response)
+                console.log('auth login response:', response)
                 if (!response || !response.code) {
-                    console.error('request error')
-                    return
-                }
-                if (response.code !== 200) {
-                    console.error('request error:', msg)
-                    return
-                }
-                const data = response.data
-                // console.log('auth login data:', data)
-                if (redirectUri) {
-                    location.href = redirectUri + '?authCode=' + data
+                    console.log('auth login response:', '请求失败，未知错误')
+                    messageDiv.innerText = '请求失败，未知错误'
+                } else if (response.code !== 200) {
+                    console.log('auth login response:', '请求失败，' + response.message)
+                    messageDiv.innerText = '请求失败，' + response.message
+                } else {
+                    messageDiv.innerText = ''
+                    const data = response.data
+                    location.href = redirectUri + "?authCode=" + data
                 }
             })
     })

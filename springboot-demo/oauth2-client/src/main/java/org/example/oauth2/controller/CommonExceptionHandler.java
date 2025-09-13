@@ -13,6 +13,6 @@ public class CommonExceptionHandler {
     @ExceptionHandler(value = NoPermissionException.class)
     public Result<String> noPermissionException(Exception e) {
         log.error(e.getMessage(), e);
-        return new Result<String>().error(403, e.getMessage());
+        return Result.error(403, e.getMessage());
     }
 }

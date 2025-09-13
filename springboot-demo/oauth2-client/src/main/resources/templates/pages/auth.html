@@ -1,0 +1,40 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+</head>
+<body>
+<div>第三方登录</div>
+<div>
+  <button id="oauth2-btn">oauth2授权</button>
+  <button disabled>其他授权</button>
+</div>
+<div id="message-div">
+
+</div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+    const params = new URLSearchParams(window.location.search)
+    const authCode = params.get("authCode")
+    if (authCode) {
+        ajax('GET', 'http://localhost:8091/auth/' + authCode)
+            .then((res) => {
+                const response = JSON.parse(res.response)
+                if (response && response.code === 200) {
+                    location.href = 'show'
+                }
+                const messageDiv = document.querySelector('#message-div')
+                messageDiv.innerText = '获取授权失败，' + response.message
+            })
+    }
+
+    // 手动触发获取oauth2授权
+    const authBtn = document.querySelector('#oauth2-btn')
+    authBtn.onclick = function () {
+        location.href = 'http://localhost:8090/auth?clientId=123&redirectUri=http://localhost:8091/auth'
+    }
+</script>
+</body>
+</html>

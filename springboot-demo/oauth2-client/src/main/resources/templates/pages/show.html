@@ -1,0 +1,53 @@
+<!doctype html>
+<html lang="en" xmlns:th="http://www.thymeleaf.org">
+<head>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <title>Document</title>
+</head>
+<body>
+<button id="get-data-btn">重新加载</button>
+<div id="data-div"></div>
+<div id="message-div"></div>
+<script type="text/javascript" th:src="@{/js/common.js}"></script>
+<script th:inline="javascript">
+    console.log('client show init')
+    getData()
+    const getDataBtn = document.querySelector('#get-data-btn')
+    getDataBtn.onclick = getData
+
+    /**
+     * 获取数据
+     */
+    function getData() {
+        ajax('GET', 'http://localhost:8091/resource/data')
+            .then((res => {
+                console.log('client data res: ', res.response)
+                const response = JSON.parse(res.response)
+                const messageDiv = document.querySelector('#message-div')
+                const dataDiv = document.querySelector('#data-div')
+                if (!response) {
+                    console.log('client show', '获取数据失败，发生未知错误')
+                    messageDiv.innerText = '获取数据失败，发生未知错误'
+                } else if (response.code === 200) {
+                    console.log('client show', '获取数据成功')
+                    dataDiv.innerText = response.data
+                    messageDiv.innerText = ''
+                } else if (response.code === 403) {
+                    console.log('client show', '获取数据失败，未授权')
+                    messageDiv.innerText = '获取数据失败，未授权'
+                    setTimeout(() => {
+                        location.href = 'http://localhost:8090/auth?clientId=123&redirectUri=http://localhost:8091/auth'
+                    }, 1000)
+                } else {
+                    console.log('client show', '获取数据失败，' + response.message)
+                    messageDiv.innerText = '获取数据失败，' + response.message
+                    setTimeout(() => {
+                        location.href = 'index'
+                    }, 1000)
+                }
+            }))
+    }
+</script>
+</body>
+</html>

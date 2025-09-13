@@ -17,6 +17,6 @@ public class ResourceController {
         map.put("test", "data");
         ObjectMapper mapper = new ObjectMapper();
         String value = mapper.writeValueAsString(map);
-        return new Result<String>().success("success", value);
+        return Result.success("success", value);
     }
 }

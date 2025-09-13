@@ -3,10 +3,10 @@ package org.example.oauth2.controller;
 import com.fasterxml.jackson.core.JsonProcessingException;
 import com.fasterxml.jackson.core.type.TypeReference;
 import com.fasterxml.jackson.databind.ObjectMapper;
+import org.example.oauth2.dto.AuthRequest;
 import org.example.oauth2.dto.Result;
 import org.springframework.cache.Cache;
 import org.springframework.cache.CacheManager;
-import org.springframework.cache.annotation.CachePut;
 import org.springframework.cache.annotation.Cacheable;
 import org.springframework.http.HttpEntity;
 import org.springframework.http.HttpHeaders;
@@ -19,6 +19,7 @@ import org.springframework.web.client.RestTemplate;
 
 import javax.annotation.Resource;
 import javax.naming.NoPermissionException;
+import javax.servlet.http.HttpServletRequest;
 import java.util.HashMap;
 import java.util.Map;
 
@@ -28,16 +29,21 @@ public class ClientController {
     @Resource
     private CacheManager cacheManager;
 
-    @Cacheable(value = "token", key = "'admin'")
+    /**
+     * 获取访问token并缓存
+     * @param code
+     * @return
+     * @throws JsonProcessingException
+     */
     @RequestMapping("/auth/{code}")
     public Result<String> auth(@PathVariable String code) throws JsonProcessingException {
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
-        Map<String, String> params = new HashMap<>();
-        params.put("code", code);
-        params.put("clientId", "123");
-        params.put("clientSecret", "test123");
-        HttpEntity<Map<String, String>> entity = new HttpEntity<>(params, headers);
+        AuthRequest authRequest = new AuthRequest();
+        authRequest.setCode(code);
+        authRequest.setClientId("123");
+        authRequest.setClientSecret("test123");
+        HttpEntity<AuthRequest> entity = new HttpEntity<>(authRequest, headers);
         ResponseEntity<String> response = restTemplate.postForEntity("http://localhost:8090/token", entity, String.class);
         HttpStatus statusCode = response.getStatusCode();
         if (statusCode == HttpStatus.OK) {
@@ -46,31 +52,28 @@ public class ClientController {
             Result<String> result = mapper.readValue(body, new TypeReference<Result<String>>() {
             });
             if (result.getCode() == 200) {
-                return new Result<String>().success("success", "ttt:" + result.getData());
+                Cache token = cacheManager.getCache("token");
+                assert token != null;
+                // 缓存授权token
+                token.put("auth:admin", result.getData());
+                // 假设客户端token可解析出admin用户名
+                return Result.success("success", "client:token");
             }
-            return new Result<String>().error(result.getMsg());
+            return Result.error(result.getMessage());
         }
-        return new Result<String>().error();
+        return Result.error();
     }
 
-    @RequestMapping("/data")
-    public Result<String> getData() throws JsonProcessingException, NoPermissionException {
-        // 从缓存中获取token
-        Cache cache = cacheManager.getCache("token");
-        if (cache == null) {
-            throw new NoPermissionException("Invalid token");
-        }
-        Object tokenCache = cache.get("admin", Object.class);
-        if (tokenCache == null) {
-            throw new NoPermissionException("Invalid token");
-        }
+    /**
+     * 请求数据
+     * @param request
+     * @return
+     * @throws JsonProcessingException
+     */
+    @RequestMapping("/resource/data")
+    public Result<String> getData(HttpServletRequest request) throws JsonProcessingException {
+        String token = (String) request.getAttribute("token");
         ObjectMapper mapper = new ObjectMapper();
-        Result<String> tokenInfo = mapper.readValue(mapper.writeValueAsString(tokenCache), new TypeReference<Result<String>>() {
-        });
-        if (tokenInfo.getCode() != 200) {
-            throw new NoPermissionException("Invalid token");
-        }
-        String token = tokenInfo.getData().replace("ttt:", "");
         // 请求数据
         RestTemplate restTemplate = new RestTemplate();
         HttpHeaders headers = new HttpHeaders();
@@ -86,10 +89,10 @@ public class ClientController {
             Result<String> result = mapper.readValue(body, new TypeReference<Result<String>>() {
             });
             if (result.getCode() == 200) {
-                return new Result<String>().success("success", result.getData());
+                return Result.success("success", result.getData());
             }
-            return new Result<String>().error(result.getMsg());
+            return Result.error(result.getMessage());
         }
-        return new Result<String>().error(response.getBody());
+        return Result.error(response.getBody());
     }
 }
